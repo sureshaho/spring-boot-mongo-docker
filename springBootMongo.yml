@@ -1,4 +1,5 @@
 # Replication Controller for springapp
+---
 apiVersion: v1
 kind: ReplicationController
 metadata:
