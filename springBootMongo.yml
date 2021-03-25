@@ -1,5 +1,5 @@
 # Replication Controller for springapp
-apiVersion: apps/v1
+apiVersion: v1 
 kind: ReplicationController
 metadata:
   name: spring-controller
@@ -19,7 +19,7 @@ spec:
         - containerPort: 8080  
 ---
 # Node Port Service For SpringApp
-apiVersion: apps/v1
+apiVersion: v1 
 kind: Service
 metadata:
   name: springboot
@@ -32,7 +32,7 @@ spec:
     app: springboot
 ---
 # Mongo RC with host path Volume
-apiVersion: apps/v1
+apiVersion: v1 
 kind: ReplicationController
 metadata:
   name: mongo-controller
@@ -50,7 +50,7 @@ spec:
         name: mongo
 ---
 # Mongo Node Port RC
-apiVersion: apps/v1
+apiVersion: v1 
 kind: Service
 metadata:
   name: mongo
