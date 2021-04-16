@@ -12,7 +12,7 @@ pipeline {
     stages{
         stage("GIT checkout"){
             steps{
-               git branch: 'main', url: 'https://github.com/sureshaho/spring-boot-mongo-docker.git'
+               git branch: 'main', url: 'https://github.com/sureshaho/MyLab.git'
             }
         }
         stage("Maven build"){
@@ -44,10 +44,10 @@ pipeline {
                     def NexusRepo = Version.endsWith("SNAPSHOT") ? "suresha-SNAPSHOT" : "suresha-RELEASE"
                     nexusArtifactUploader artifacts: [[artifactId: "${ArtifactId}", classifier: '', file: "target/${ArtifactId}-${Version}.war", type: 'war']], credentialsId: '233b403f-4f7c-4e9d-b683-cfdf439cdbcb', groupId: "${GroupId}", nexusUrl: '172.20.10.217:8081', nexusVersion: 'nexus3', protocol: 'http', repository: "${NexusRepo}", version: "${Version}"
                 }
-            
+            }
 
         }
-
+        
         stage("Deploy to Tomcat"){
             steps{
                  sshPublisher(publishers: [sshPublisherDesc(configName: 'Ansible-controller', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'ansible-playbook /opt/playbooks/downloadanddeploy.yaml -i /opt/playbooks/hosts', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
