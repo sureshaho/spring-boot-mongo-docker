@@ -42,7 +42,7 @@ pipeline {
             steps{
                 script {
                     def NexusRepo = Version.endsWith("SNAPSHOT") ? "suresha-SNAPSHOT" : "suresha-RELEASE"
-                    nexusArtifactUploader artifacts: [[artifactId: "${ArtifactId}", classifier: '', file: "target/${ArtifactId}-${Version}.war", type: 'war']], credentialsId: '233b403f-4f7c-4e9d-b683-cfdf439cdbcb', groupId: "${GroupId}", nexusUrl: '172.20.10.217:8081', nexusVersion: 'nexus3', protocol: 'http', repository: "${NexusRepo}", version: "${Version}"
+                    nexusArtifactUploader artifacts: [[artifactId: "${ArtifactId}", classifier: '', file: "target/${ArtifactId}-${Version}.jar", type: 'jar']], credentialsId: '233b403f-4f7c-4e9d-b683-cfdf439cdbcb', groupId: "${GroupId}", nexusUrl: '172.20.10.217:8081', nexusVersion: 'nexus3', protocol: 'http', repository: "${NexusRepo}", version: "${Version}"
                 }
             }
 
