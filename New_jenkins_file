@@ -20,6 +20,14 @@ pipeline {
                 sh "mvn clean  package"
             }
         }
+        stage("Print the Pom.xml read values"){
+            steps{
+                echo "ArtifactId is '${ArtifactId}'"
+                echo "Version is '${Version}'"
+                echo "Name is '${Name}'"
+                echo "GroupId is '${GroupId}'"
+            }
+        }
         // Stage3 : Publish the source code to Sonarqube
         stage ('Sonarqube Analysis'){
             steps {
