@@ -1,0 +1,61 @@
+pipeline {
+    
+    environment{
+        PATH = "/opt/maven/apache-maven-3.8.1/bin:$PATH"
+        ArtifactId = readMavenPom().getArtifactId()
+        Version = readMavenPom().getVersion()
+        Name = readMavenPom().getName()
+        GroupId = readMavenPom().getGroupId()
+    }
+    
+    agent any
+    stages{
+        stage("GIT checkout"){
+            steps{
+               git branch: 'main', url: 'https://github.com/sureshaho/MyLab.git'
+            }
+        }
+        stage("Maven build"){
+            steps{
+                sh "mvn clean  package"
+            }
+        }
+        // Stage3 : Publish the source code to Sonarqube
+        stage ('Sonarqube Analysis'){
+            steps {
+                echo ' Source code published to Sonarqube for SCA......'
+                withSonarQubeEnv('sonarqube'){ // You can override the credential to be used
+                     sh 'mvn sonar:sonar'
+                }
+
+            }
+        }
+        stage("push to nexus"){
+            steps{
+                script {
+                    def NexusRepo = Version.endsWith("SNAPSHOT") ? "suresha-SNAPSHOT" : "suresha-RELEASE"
+                    nexusArtifactUploader artifacts: [[artifactId: "${ArtifactId}", classifier: '', file: "target/${ArtifactId}-${Version}.war", type: 'war']], credentialsId: '233b403f-4f7c-4e9d-b683-cfdf439cdbcb', groupId: "${GroupId}", nexusUrl: '172.20.10.217:8081', nexusVersion: 'nexus3', protocol: 'http', repository: "${NexusRepo}", version: "${Version}"
+                }
+            }
+
+        }
+        stage("Print the Pom.xml read values"){
+            steps{
+                echo "ArtifactId is '${ArtifactId}'"
+                echo "Version is '${Version}'"
+                echo "Name is '${Name}'"
+                echo "GroupId is '${GroupId}'"
+            }
+        }
+        stage("Deploy to Tomcat"){
+            steps{
+                 sshPublisher(publishers: [sshPublisherDesc(configName: 'Ansible-controller', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'ansible-playbook /opt/playbooks/downloadanddeploy.yaml -i /opt/playbooks/hosts', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+            }
+        }
+        stage("Deploy to Docker"){
+            steps{
+                 sshPublisher(publishers: [sshPublisherDesc(configName: 'Ansible-controller', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'ansible-playbook /opt/playbooks/docker_creation.yml -i /opt/playbooks/hosts', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+            }
+        }
+    }  
+}
