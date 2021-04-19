@@ -20,6 +20,23 @@ pipeline {
                 sh "mvn clean  package"
             }
         }
+        stage ('Sonarqube Analysis'){
+            steps {
+                echo ' Source code published to Sonarqube for SCA......'
+                withSonarQubeEnv('sonarqube'){ // You can override the credential to be used
+                     sh 'mvn sonar:sonar'
+                }
+
+            }
+        }
+        stage("Print the Pom.xml read values"){
+            steps{
+                echo "ArtifactId is '${ArtifactId}'"
+                echo "Version is '${Version}'"
+                echo "Name is '${Name}'"
+                echo "GroupId is '${GroupId}'"
+            }
+        }
         
     }  
 }
