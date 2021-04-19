@@ -51,11 +51,14 @@ pipeline {
                  sshPublisher(publishers: [sshPublisherDesc(configName: 'Ansible-controller', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'ansible-playbook /opt/playbooks/docker_creation_mithun.yaml -i /opt/playbooks/hosts', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
             }
         }
-        stage("Deploy to K8S using K8S plugin installed on jenkin"){                       
-            kubernetesDeploy (
+        stage("Deploy to K8S using K8S plugin installed on jenkin"){   
+            steps{
+                kubernetesDeploy (
                 configs: 'springBootMongo.yml',
                 kubeconfigId: 'KUBERNETES_CLUSTER_CONFIG'
-            )
+                )
+            }                    
+            
         }
     
         
