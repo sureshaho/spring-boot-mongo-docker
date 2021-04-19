@@ -1,0 +1,25 @@
+pipeline {
+    
+    environment{
+        PATH = "/opt/maven/apache-maven-3.8.1/bin:$PATH"
+        ArtifactId = readMavenPom().getArtifactId()
+        Version = readMavenPom().getVersion()
+        Name = readMavenPom().getName()
+        GroupId = readMavenPom().getGroupId()
+    }
+    
+    agent any
+    stages{
+        stage("GIT checkout"){
+            steps{
+               git branch: 'main', url: 'https://github.com/sureshaho/spring-boot-mongo-docker.git'
+            }
+        }
+        stage("Maven build"){
+            steps{
+                sh "mvn clean  package"
+            }
+        }
+        
+    }  
+}
