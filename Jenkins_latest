@@ -53,7 +53,7 @@ pipeline {
         }
         stage("Deploy to K8S using K8S plugin installed on jenkin"){                       
             kubernetesDeploy(
-                configs: 'springBootMongo-PrivateRepo.yml',
+                configs: 'springBootMongo.yml',
                 kubeconfigId: 'KUBERNETES_CLUSTER_CONFIG'
             )
         }
