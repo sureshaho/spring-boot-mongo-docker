@@ -62,7 +62,7 @@ pipeline {
         }   **/
         stage("Deploy to K8S using Kubectl installed on jenkin"){
             steps{
-                sh "kubectl apply -f /var/lib/jenkins/workspace/spring-boot-mongo-docker-1/springBootMongo.yml"
+                sh  'kubectl apply -f /var/lib/jenkins/workspace/spring-boot-mongo-docker-1/springBootMongo.yml'
 
             }
         }
