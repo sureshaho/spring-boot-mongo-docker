@@ -12,7 +12,7 @@ pipeline {
     stages{
         stage("GIT checkout"){
             steps{
-               git branch: 'main', url: 'https://github.com/MithunTechnologiesDevOps/spring-boot-mongo-docker.git'
+               git branch: 'main', url: 'https://github.com/sureshaho/spring-boot-mongo-docker.git'
             }
         }
         stage("Maven build"){
