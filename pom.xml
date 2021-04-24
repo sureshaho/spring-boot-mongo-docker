@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>0.0.706-RELEASE</version>
+		<version>0.0.787-SNAPSHOT</version>
 		<relativePath />
 		<!-- lookup parent from repository -->
 	</parent>
@@ -15,7 +15,7 @@
 	<version>1.0</version>
 	<properties>
 		<java.version>1.8</java.version>
-		<spring-boot.version>0.0.706-RELEASE</spring-boot.version>
+		<spring-boot.version>0.0.787-SNAPSHOT</spring-boot.version>
 		<spring-cloud.version>Greenwich.RELEASE</spring-cloud.version>
 		<logstash-logback-encoder.version>6.1</logstash-logback-encoder.version>
 	</properties>
